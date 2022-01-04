@@ -1,4 +1,4 @@
-package com.ongraph.demoproject.Database
+package com.ongraph.demoproject.ModelClass.Database
 
 import java.sql.Connection
 import java.sql.DriverManager
