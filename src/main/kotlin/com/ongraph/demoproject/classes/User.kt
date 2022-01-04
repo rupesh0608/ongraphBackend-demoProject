@@ -30,7 +30,7 @@ class User() {
                 val phoneNumber = user.phoneNumber.toString()
                 val userName = user.userName.toString()
                 val password = user.password.toString()
-                val query = "insert into users (first_name,middle_name,last_name,email,phone_number,user_name,password) value('$firstName','$middleName','$lastName','$email','$phoneNumber','$userName','$password')"
+                val query = "insert into user (first_name,middle_name,last_name,email,phone_number,user_name,password) value('$firstName','$middleName','$lastName','$email','$phoneNumber','$userName','$password')"
                 if (stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS) > 0) {
                     val data = HashMap<String, Any>()
                     val rs=stmt.generatedKeys
@@ -61,7 +61,7 @@ class User() {
             val userName = user.userName.toString()
             val password = user.password.toString()
             val timeStamp= SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
-            val query = "update ongraphuser set first_name='$firstName',middle_name='$middleName',last_name='$lastName',email='$email',phone_number='$phoneNumber',user_name='$userName',password='$password',updated_at='$timeStamp' where id=${user.id}"
+            val query = "update user set first_name='$firstName',middle_name='$middleName',last_name='$lastName',email='$email',phone_number='$phoneNumber',user_name='$userName',password='$password',updated_at='$timeStamp' where id=${user.id}"
             if (stmt.executeUpdate(query) > 0) {
                 res["status"] = true
                 res["message"] = "User Details Updated Successfully."
@@ -74,7 +74,7 @@ class User() {
     }
     fun delete(uid:Int): HashMap<String, Any> {
         try {
-            val query = "delete from ongraphuser where id=${uid}"
+            val query = "delete from user where id=${uid}"
             if (stmt.executeUpdate(query) > 0) {
                 res["status"] = true
                 res["message"] = "User Deleted Successfully."
@@ -89,7 +89,7 @@ class User() {
         try {
             val userName=user.userName
             val password=user.password
-            val query = "select * from ongraphuser where user_name='$userName' and password='$password'"
+            val query = "select * from user where user_name='$userName' and password='$password'"
             val result=stmt.executeQuery(query)
             if (result.next()) {
                 val data=HashMap<String,Any>()
