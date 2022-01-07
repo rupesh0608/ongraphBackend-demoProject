@@ -14,11 +14,14 @@ class MysqlDatabase {
         connectionProps["password"] = "qwertyuiop"
 
         val dbname = "demokotlinproject"
-
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance()
-            return DriverManager.getConnection(
-                    "jdbc:mysql://ongraph.coq4newt9li2.ap-south-1.rds.amazonaws.com/$dbname",
-                    connectionProps)
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver").newInstance()
+        conn = DriverManager.getConnection(
+                "jdbc:mysql://ongraph.coq4newt9li2.ap-south-1.rds.amazonaws.com/$dbname",
+                "admin", "qwertyuiop")
+    }catch (e:Exception){
+        println(e.message)
+    }
         return conn
     }
 
