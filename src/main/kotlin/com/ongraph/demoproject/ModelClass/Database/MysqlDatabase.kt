@@ -7,12 +7,14 @@ import java.util.*
 class MysqlDatabase {
 
     fun getConnection(): Connection {
+        lateinit var conn: Connection
+        try {
         val connectionProps = Properties()
         connectionProps["user"] = "admin"
         connectionProps["password"] = "qwertyuiop"
-        lateinit var conn: Connection
+
         val dbname = "demokotlinproject"
-        try {
+
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance()
             conn = DriverManager.getConnection(
                     "jdbc:mysql://ongraph.coq4newt9li2.ap-south-1.rds.amazonaws.com:3306/$dbname",
