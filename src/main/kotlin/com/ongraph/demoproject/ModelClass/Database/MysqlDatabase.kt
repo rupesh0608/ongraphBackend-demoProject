@@ -8,7 +8,7 @@ class MysqlDatabase {
 
     fun getConnection(): Connection {
         lateinit var conn: Connection
-        try {
+
         val connectionProps = Properties()
         connectionProps["user"] = "admin"
         connectionProps["password"] = "qwertyuiop"
@@ -17,11 +17,8 @@ class MysqlDatabase {
 
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance()
             return DriverManager.getConnection(
-                    "jdbc:mysql://ongraph.coq4newt9li2.ap-south-1.rds.amazonaws.com:3306/$dbname",
+                    "jdbc:mysql://ongraph.coq4newt9li2.ap-south-1.rds.amazonaws.com/$dbname",
                     connectionProps)
-        } catch (e: Exception) {
-            println(e.message)
-        }
         return conn
     }
 
