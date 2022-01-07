@@ -6,8 +6,8 @@ import java.util.*
 
 class MysqlDatabase {
 
-    fun getConnection(): Connection {
-        lateinit var conn: Connection
+    fun getConnection(): Connection? {
+         var conn: Connection?=null
 
         val connectionProps = Properties()
         connectionProps["user"] = "admin"

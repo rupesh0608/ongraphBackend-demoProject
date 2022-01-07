@@ -19,7 +19,7 @@ class User() {
 
     private lateinit var query: String
     private val conn = mysql.getConnection()
-    private val stmt = conn.createStatement() as Statement
+    private val stmt = conn?.createStatement() as Statement
     fun register(user: UserModel): HashMap<String, Any> {
         try {
             val msg = checkFieldsForRegistration(user)
@@ -220,7 +220,7 @@ class User() {
         if (user.email != null) {
             val mysql = MysqlDatabase()
             val conn = mysql.getConnection()
-            val stmt = conn.createStatement() as Statement
+            val stmt = conn?.createStatement() as Statement
             val email = user.email
             val query = "select email from user where email='$email'"
             val rs = stmt.executeQuery(query)
@@ -231,7 +231,7 @@ class User() {
         if (user.phoneNumber != null) {
             val mysql = MysqlDatabase()
             val conn = mysql.getConnection()
-            val stmt = conn.createStatement() as Statement
+            val stmt = conn?.createStatement() as Statement
             val phoneNumber = user.phoneNumber
             val query = "select phone_number from user where phone_number='$phoneNumber'"
             val rs = stmt.executeQuery(query)
@@ -242,7 +242,7 @@ class User() {
         if (user.userName != null) {
             val mysql = MysqlDatabase()
             val conn = mysql.getConnection()
-            val stmt = conn.createStatement() as Statement
+            val stmt = conn?.createStatement() as Statement
             val userName = user.userName
             val query = "select user_name from user where user_name='$userName'"
             val rs = stmt.executeQuery(query)
@@ -261,7 +261,7 @@ class User() {
         if (user.email != null) {
             val mysql = MysqlDatabase()
             val conn = mysql.getConnection()
-            val stmt = conn.createStatement() as Statement
+            val stmt = conn?.createStatement() as Statement
             val email = user.email
             val query = "select email from registration2 where email='$email'"
             val rs = stmt.executeQuery(query)
@@ -272,7 +272,7 @@ class User() {
         if (user.username != null) {
             val mysql = MysqlDatabase()
             val conn = mysql.getConnection()
-            val stmt = conn.createStatement() as Statement
+            val stmt = conn?.createStatement() as Statement
             val userName = user.username
             val query = "select username from registration2 where username='$userName'"
             val rs = stmt.executeQuery(query)
@@ -287,7 +287,7 @@ class User() {
         if (user.phone_number != null) {
             val mysql = MysqlDatabase()
             val conn = mysql.getConnection()
-            val stmt = conn.createStatement() as Statement
+            val stmt = conn?.createStatement() as Statement
             val phoneNumber = user.phone_number
             val query = "select phone_number from profile2 where phone_number='$phoneNumber'"
             val rs = stmt.executeQuery(query)
