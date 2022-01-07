@@ -15,9 +15,9 @@ class MysqlDatabase {
 
         val dbname = "demokotlinproject"
     try {
-        Class.forName("com.mysql.cj.jdbc.Driver").newInstance()
+        Class.forName("com.mysql.jdbc.Driver").newInstance()
         conn = DriverManager.getConnection(
-                "jdbc:mysql://ongraph.coq4newt9li2.ap-south-1.rds.amazonaws.com/$dbname",
+                "jdbc:mysql://ongraph.coq4newt9li2.ap-south-1.rds.amazonaws.com:3306/$dbname",
                 "admin", "qwertyuiop")
     }catch (e:Exception){
         println(e.message)
