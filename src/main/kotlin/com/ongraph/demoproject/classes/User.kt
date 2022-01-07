@@ -1,13 +1,13 @@
 package com.ongraph.demoproject.classes
 
 import com.ongraph.demoproject.ModelClass.Database.MysqlDatabase
+import com.ongraph.demoproject.ModelClass.Database.PostgreSqlDatabase
+import com.ongraph.demoproject.ModelClass.Registration2
 import com.ongraph.demoproject.ModelClass.LoginModel
+import com.ongraph.demoproject.ModelClass.Profile
 import com.ongraph.demoproject.ModelClass.UserModel
-import java.sql.ResultSet
 import java.sql.Statement
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -15,6 +15,7 @@ import kotlin.collections.HashMap
 class User() {
     private val res = HashMap<String, Any>()
     private val mysql = MysqlDatabase()
+//    private val mysql = PostgreSqlDatabase()
 
     private lateinit var query: String
     private val conn = mysql.getConnection()
@@ -118,7 +119,82 @@ class User() {
         }
         return res
     }
-
+    fun userRegister(user: Registration2): HashMap<String, Any> {
+        try {
+            val msg = checkFieldsForRegistration2(user)
+            if (msg == "") {
+                val userName=user.username.toString()
+                val email=user.email.toString()
+                val password=user.password.toString()
+                val query = "insert into registration2 (username,email,password) value('$userName','$email','$password')"
+                if (stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS) > 0) {
+                    val data = HashMap<String, Any>()
+                    val rs=stmt.generatedKeys
+                    if (rs.next()) {
+                        data["id"] = rs.getInt(1)
+                    }
+                    res["status"] = true
+                    res["message"] = "Registered successfully."
+                    res["data"] = data
+                }
+            } else {
+                res["status"] = false
+                res["message"] = msg
+            }
+        } catch (e: Exception) {
+            res["status"] = false
+            res["message"] = "ERROR:${e.message}"
+        }
+        return res
+    }
+    fun profileCreation(user: Profile): HashMap<String, Any> {
+        try {
+            val msg = checkFieldsForProfileCreation(user)
+            if (msg == "") {
+                val uid = user.uid
+                val firstName = user.first_name.toString()
+                val lastName = user.last_name.toString()
+                val phoneNumber = user.phone_number.toString()
+                val address = user.address.toString()
+                val query = "insert into profile2 (uid,first_name,last_name,phone_number,address) value($uid,'$firstName','$lastName','$phoneNumber','$address')"
+                if (stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS) > 0) {
+                    val data = HashMap<String, Any>()
+                    val rs=stmt.generatedKeys
+                    if (rs.next()) {
+                        data["id"] = rs.getInt(1)
+                    }
+                    res["status"] = true
+                    res["message"] = "Profile Created successfully."
+                    res["data"] = data
+                }
+            } else {
+                res["status"] = false
+                res["message"] = msg
+            }
+        } catch (e: Exception) {
+            res["status"] = false
+            res["message"] = "ERROR:${e.message}"
+        }
+        return res
+    }
+    fun profileUpdate(user: Profile): HashMap<String, Any> {
+        try {
+                val firstName = user.first_name.toString()
+                val lastName = user.last_name.toString()
+                val phoneNumber = user.phone_number.toString()
+                val address = user.address.toString()
+                val timeStamp= SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+                val query = "update profile2 set first_name='$firstName',last_name='$lastName',phone_number='$phoneNumber',address='$address',updated_at='$timeStamp' where uid=${user.uid}"
+                if (stmt.executeUpdate(query)>0) {
+                    res["status"] = true
+                    res["message"] = "Profile Updated successfully."
+                }
+        } catch (e: Exception) {
+            res["status"] = false
+            res["message"] = "ERROR:${e.message}"
+        }
+        return res
+    }
     private fun checkFieldsForRegistration(user: UserModel): String {
         var msg = ""
 //        if (user.firstName == null) {
@@ -172,6 +248,51 @@ class User() {
             val rs = stmt.executeQuery(query)
             if (rs.next()) {                            //if rs.next() returns false
                 msg = "$userName is already taken"
+            }
+        }
+        return msg
+    }
+    private fun checkFieldsForRegistration2(user: Registration2): String {
+        var msg = ""
+
+        if (user.password != null && user.confirm_password != null && !user.password.equals(user.confirm_password)) {
+            msg = "password and confirm_password must be same"
+        }
+        if (user.email != null) {
+            val mysql = MysqlDatabase()
+            val conn = mysql.getConnection()
+            val stmt = conn.createStatement() as Statement
+            val email = user.email
+            val query = "select email from registration2 where email='$email'"
+            val rs = stmt.executeQuery(query)
+            if (rs.next()) {                            //if rs.next() returns false
+                msg = "$email is already Registered"
+            }
+        }
+        if (user.username != null) {
+            val mysql = MysqlDatabase()
+            val conn = mysql.getConnection()
+            val stmt = conn.createStatement() as Statement
+            val userName = user.username
+            val query = "select username from registration2 where username='$userName'"
+            val rs = stmt.executeQuery(query)
+            if (rs.next()) {                            //if rs.next() returns false
+                msg = "$userName is already taken"
+            }
+        }
+        return msg
+    }
+    private fun checkFieldsForProfileCreation(user: Profile): String {
+        var msg = ""
+        if (user.phone_number != null) {
+            val mysql = MysqlDatabase()
+            val conn = mysql.getConnection()
+            val stmt = conn.createStatement() as Statement
+            val phoneNumber = user.phone_number
+            val query = "select phone_number from profile2 where phone_number='$phoneNumber'"
+            val rs = stmt.executeQuery(query)
+            if (rs.next()) {                            //if rs.next() returns false
+                msg = "$phoneNumber is already Registered"
             }
         }
         return msg
