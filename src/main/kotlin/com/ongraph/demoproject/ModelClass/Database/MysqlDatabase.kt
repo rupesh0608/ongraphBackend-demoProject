@@ -19,7 +19,6 @@ class MysqlDatabase {
         conn = DriverManager.getConnection(
                 "jdbc:mysql://ongraph.coq4newt9li2.ap-south-1.rds.amazonaws.com:3306/$dbname",
                 "admin", "qwertyuiop")
-
         return conn
     }
 
